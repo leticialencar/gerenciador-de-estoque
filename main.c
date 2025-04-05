@@ -2,6 +2,7 @@
 #include <string.h>
 
 #define max_produtos_na_lista 10
+//quantidade de cadastros que o usuário pode realizar
 
 typedef struct Produto {
     char codigo[9];
@@ -15,24 +16,52 @@ int total_cadastros = 0;
 
 void CadastrarProduto() {
     if (total_cadastros >= max_produtos_na_lista) {
-        printf("Você não pode cadastrar mais itens!\n");
+        printf("Você não pode cadastrar mais itens, pois a quantidade de cadastros chegou ao limite!\n");
     } else {
         Produto produto;
         printf("\nIniciando o cadastro do produto\n");
 
-        printf("Insira o código do produto (máximo 8 caracteres):\n");
-        scanf("%8s", produto.codigo); 
+        //loop para verificar se o código do produto ja existe
+        while (1) {
+            printf("Insira o código do produto (máximo 8 dígitos):\n");
+            scanf("%s", produto.codigo);
+
+            if (strlen(produto.codigo) > 8) {
+                printf("O código do produto deve ter no máximo 8 dígitos!\n");
+                continue;
+            }
+
+            //verifica se o codigo que o usuario digitou já existe
+            int i;
+            for (i = 0; i < total_cadastros; i++) {
+                if (strcmp(produto.codigo, produtos[i].codigo) == 0) {
+                    printf("Já existe um prouto com esse código! Digite outro.\n");
+                    break;
+                }
+            }
+
+            if (i == total_cadastros) {
+                //se o codigo for diferente
+                break;
+            }
+        }
 
         printf("Insira a descrição do produto:\n");
         scanf(" %[^\n]", produto.descricao); 
+        //[^\n] para ler toda descricao que o usuario digitar, junto com os espacos
 
         printf("Insira a quantidade de produtos no estoque:\n");
-        scanf("%d", &produto.quantidade); 
+        while (scanf("%d", &produto.quantidade) != 1 || produto.quantidade < 0) {
+            printf("Quantidade inválida! Por favor, digite apenas números inteiros positivos:\n");
+
+            while (getchar() != '\n');
+            //limpa o que o usuario digitou anteriormente e pede para que ele digite novamente
+        }
 
         produtos[total_cadastros] = produto;
 
         for (int i = 0; i < 9; i++) {
-            lista[total_cadastros][i] = produto.codigo[i]; 
+            lista[total_cadastros][i] = produto.codigo[i];
         }
 
         total_cadastros++;
@@ -47,40 +76,40 @@ void CadastrarProduto() {
 
 void RemoverProduto(char codigo[]) {
     int index = -1;
+    //indice que vai guardar a posicao do produto na lista, ele comeca como -1 pra indicar que nao foi encontrado nada ainda
 
     for (int i = 0; i < total_cadastros; i++) {
-        int j;
-        for (j = 0; j < 9; j++) {
-            if (codigo[j] != lista[i][j]) {
-                break;
-            }
-        }
-        if (j == 9) {  
-            index = i; 
+        if (strcmp(codigo, lista[i]) == 0) {
+            //compara o codigo que o usuario digitou (codigo) com o codigo do produto ja cadastrado (lista[i])
+            index = i;
+            //guarda a posicao que o produto esta
             break;
         }
     }
 
     if (index == -1) {
+        //caso o indice continue como -1
         printf("Produto com código %s não encontrado!\n", codigo);
         return;
     }
 
     for (int i = index; i < total_cadastros - 1; i++) {
-        produtos[i] = produtos[i + 1];  
-        for (int j = 0; j < 9; j++) {
-            lista[i][j] = lista[i + 1][j];  
-        }
+        //for que comeca na posicao onde esta o produto que vai ser removido e vai ate o penultimo item da lista
+        produtos[i] = produtos[i + 1];
+        //move o produto da proxima posicao pra cima
+        strcpy(lista[i], lista[i + 1]);
+        //move o codigo do proximo produto para a posicao atual
     }
 
     total_cadastros--;
+    //diminui o total de cadastros pq agora tem um a menos
 
     printf("Produto com código %s removido com sucesso!\n", codigo);
 }
 
 void ExibirProdutos() {
     if (total_cadastros == 0) {
-        printf("Nenhum produto cadastrado.\n");
+        printf("\nNenhum produto cadastrado.\n");
     } else {
         for (int i = 0; i < total_cadastros; i++) {
             printf("\nProduto %d:\n", i + 1);
@@ -99,7 +128,7 @@ int main() {
         printf("2. Remover Produto\n");
         printf("3. Exibir Produtos\n");
         printf("4. Sair\n");
-        printf("Escolha a opção: ");
+        printf("Por gentileza, escolha a opção que você deseja realizar: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
