@@ -83,12 +83,12 @@ void ExibirProdutos(ListaProdutos* lista) {
         return;
     }
     Produto* atual = lista->inicio;
-    int i = 1;
     while (atual != NULL) {
-        printf("\nProduto %d:\n", i++);
+        printf("\n"); 
         printf("Código: %s\n", atual->codigo);
         printf("Descrição: %s\n", atual->descricao);
         printf("Quantidade: %d\n", atual->quantidade);
+        printf("\n"); 
         atual = atual->proximo;
     }
 }
