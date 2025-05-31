@@ -191,7 +191,7 @@ int main() {
         printf("5. Busca Linear por Descrição\n");
         printf("6. Busca Binária por Descrição\n");
         printf("7. Sair\n");
-        printf("Escolha a opção: ");
+        printf("Por gentileza, escolha a opção que você deseja realizar: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
@@ -200,7 +200,7 @@ int main() {
                 printf("\nIniciando o cadastro do produto\n");
                 while (1) {
                     printf("Insira o código do produto (máximo 8 dígitos): ");
-                    scanf("%8s", novo.codigo);
+                    scanf("%s", novo.codigo);
                     if (strlen(novo.codigo) > 8) {
                         printf("O código do produto deve ter no máximo 8 dígitos!\n");
                         continue;
@@ -213,12 +213,12 @@ int main() {
                 while (1) {
                     printf("Insira a quantidade do produto: ");
                     if (scanf("%d", &novo.quantidade) != 1) {
-                        printf("Quantidade inválida! Por favor, insira um número inteiro positivo.\n");
+                        printf("Quantidade inválida! Por favor, digite apenas números inteiros positivos:\n");
                         while (getchar() != '\n'); 
                         continue;
                     }
                     if (novo.quantidade < 0) {
-                        printf("A quantidade não pode ser negativa! Tente novamente.\n");
+                        printf("A quantidade não pode ser negativa! Digite apenas números inteiros positivos:\n");
                         continue;
                     }
                     break;
@@ -228,7 +228,7 @@ int main() {
             }
             case 2: {
                 char codigo[9];
-                printf("Digite o código do produto a ser removido: ");
+                printf("Insira o código do produto que deseja remover: ");
                 scanf("%s", codigo);
                 RemoverProduto(listaProdutos, codigo);
                 break;
