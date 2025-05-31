@@ -209,8 +209,20 @@ int main() {
                 }
                 printf("Insira a descrição do produto: ");
                 scanf(" %[^\n]", novo.descricao);
-                printf("Insira a quantidade do produto: ");
-                scanf("%d", &novo.quantidade);
+                
+                while (1) {
+                    printf("Insira a quantidade do produto: ");
+                    if (scanf("%d", &novo.quantidade) != 1) {
+                        printf("Quantidade inválida! Por favor, insira um número inteiro positivo.\n");
+                        while (getchar() != '\n'); 
+                        continue;
+                    }
+                    if (novo.quantidade < 0) {
+                        printf("A quantidade não pode ser negativa! Tente novamente.\n");
+                        continue;
+                    }
+                    break;
+                }
                 CadastrarProduto(listaProdutos, novo);
                 break;
             }
